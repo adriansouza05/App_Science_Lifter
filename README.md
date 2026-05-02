@@ -1,8 +1,4 @@
-Aqui está seu README **atualizado**, com uma nova seção de **Firebase + API**, mantendo direto ao ponto e útil pra sua dupla:
-
----
-
-# 📱 App_Trabalho
+# 📱 App_Science_Lifter
 
 > Guia de referência rápida para colaboradores do projeto — comandos Git, Flutter, Firebase e API.
 
