@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:device_preview_plus/device_preview_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart'; // ← 1. ADICIONE ESTA LINHA
+import 'firebase_options.dart'; // ← 2. ADICIONE ESTA LINHA (Gerada pelo CLI)
 import 'providers/auth_provider.dart';
-import 'pages/splash_page.dart'; // ← Importação corrigida para a Splash Page
+import 'pages/splash_page.dart';
 import 'app_theme.dart';
 
-void main() {
+// 3. Altere void main() para Future<void> main() async
+Future<void> main() async {
+  // 4. Garante que os componentes do Flutter estejam prontos antes de iniciar o Firebase[cite: 1]
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 5. Inicializa o Firebase com as configurações do seu projeto[cite: 1]
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (ctx) => AuthProvider())],
-      child: DevicePreview(
-        enabled: true, // ← mude para false ao gerar o APK final
-        builder: (ctx) => const MyApp(),
-      ),
+      child: DevicePreview(enabled: true, builder: (ctx) => const MyApp()),
     ),
   );
 }
@@ -28,7 +34,7 @@ class MyApp extends StatelessWidget {
       builder: DevicePreview.appBuilder,
       title: 'Science Lifter',
       theme: AppTheme.theme,
-      home: const SplashPage(), // ← AGORA O APP INICIA PELA SPLASH PAGE
+      home: const SplashPage(),
     );
   }
 }

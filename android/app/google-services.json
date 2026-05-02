@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621537680556",
+    "project_id": "appsciencelifter",
+    "storage_bucket": "appsciencelifter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621537680556:android:7d513ec38715c8ecc95309",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvrRipVSQev4KylLWnzubJcLsaWqIi3NE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
