@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../app_theme.dart';
+import '../../../core/theme/app_theme.dart';
 
 class ExercisesPage extends StatelessWidget {
   final String tipo;

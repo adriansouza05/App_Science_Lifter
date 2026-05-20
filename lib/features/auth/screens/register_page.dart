@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import '../app_theme.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import '../../../core/theme/app_theme.dart';
+import '../controllers/auth_provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,49 +19,54 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController senhaCtrl = TextEditingController();
   final TextEditingController confSenhaCtrl = TextEditingController();
 
-  void _cadastrar() {
+  void _cadastrar() async {
     if (_formKey.currentState!.validate()) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: AppTheme.cardGrey,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: AppTheme.borderGrey),
+      try {
+        await context.read<AuthProvider>().register(
+          nome: nomeCtrl.text.trim(),
+          email: emailCtrl.text.trim(),
+          telefone: telCtrl.text.trim(),
+          password: senhaCtrl.text.trim(),
+        );
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Cadastro realizado com sucesso! Redirecionando..."),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
           ),
-          title: const Text("Sucesso", style: TextStyle(color: AppTheme.white)),
-          content: const Text(
-            "Usuário cadastrado com sucesso!",
-            style: TextStyle(color: AppTheme.textMuted),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Text(
-                "OK",
-                style: TextStyle(
-                  color: AppTheme.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+        );
+      } on FirebaseAuthException catch (e) {
+        String msg = "Erro ao realizar cadastro.";
+        if (e.code == 'email-already-in-use') {
+          msg = "Este endereço de e-mail já está sendo utilizado.";
+        } else if (e.code == 'weak-password') {
+          msg = "A senha fornecida é muito fraca.";
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg), backgroundColor: AppTheme.red),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+
     return Scaffold(
       backgroundColor: AppTheme.black,
       appBar: AppBar(
         title: const Text("CRIAR CONTA"),
+        backgroundColor: AppTheme.black,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 18,
+            color: AppTheme.white,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -67,13 +75,13 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
                 controller: nomeCtrl,
                 style: const TextStyle(color: AppTheme.white),
                 decoration: const InputDecoration(labelText: "Nome Completo"),
-                validator: (val) => val!.isEmpty ? "Campo obrigatório" : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? "Campo obrigatório" : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -81,11 +89,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: const TextStyle(color: AppTheme.white),
                 decoration: const InputDecoration(labelText: "E-mail"),
                 keyboardType: TextInputType.emailAddress,
-                validator: (val) {
-                  if (val!.isEmpty) return "Campo obrigatório";
-                  if (!val.contains("@")) return "E-mail inválido";
-                  return null;
-                },
+                validator: (val) =>
+                    val == null || val.isEmpty ? "Campo obrigatório" : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -93,7 +98,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: const TextStyle(color: AppTheme.white),
                 decoration: const InputDecoration(labelText: "Telefone"),
                 keyboardType: TextInputType.phone,
-                validator: (val) => val!.isEmpty ? "Campo obrigatório" : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? "Campo obrigatório" : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -101,8 +107,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 obscureText: true,
                 style: const TextStyle(color: AppTheme.white),
                 decoration: const InputDecoration(labelText: "Senha"),
-                validator: (val) =>
-                    val!.length < 6 ? "Mínimo 6 caracteres" : null,
+                validator: (val) => val == null || val.length < 6
+                    ? "Mínimo 6 caracteres"
+                    : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -110,16 +117,16 @@ class _RegisterPageState extends State<RegisterPage> {
                 obscureText: true,
                 style: const TextStyle(color: AppTheme.white),
                 decoration: const InputDecoration(labelText: "Confirmar Senha"),
-                validator: (val) {
-                  if (val != senhaCtrl.text) return "As senhas não conferem";
-                  return null;
-                },
+                validator: (val) =>
+                    val != senhaCtrl.text ? "As senhas não conferem" : null,
               ),
               const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: _cadastrar,
-                child: const Text("FINALIZAR CADASTRO"),
-              ),
+              authProvider.isLoading
+                  ? const CircularProgressIndicator(color: AppTheme.red)
+                  : ElevatedButton(
+                      onPressed: _cadastrar,
+                      child: const Text("FINALIZAR CADASTRO"),
+                    ),
             ],
           ),
         ),

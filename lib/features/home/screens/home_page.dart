@@ -1,28 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import '../app_theme.dart';
-import 'strategies_page.dart';
-import 'comments_page.dart';
-import 'about_page.dart';
+
+// 1. IMPORTS DA BASE
+import '../../../core/theme/app_theme.dart';
+import '../../auth/controllers/auth_provider.dart';
+import '../../api/screens/api_screen.dart';
+
+// 2. IMPORTS DAS NOVAS TELAS
+import '../../strategies/screens/strategies_page.dart';
+import '../../community/screens/comments_page.dart';
+import '../../about/screens/about_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final userName = context.watch<AuthProvider>().userName;
+    final authProvider = context.watch<AuthProvider>();
+    final displayEmail = authProvider.userEmail;
+    final userName = displayEmail.isNotEmpty
+        ? displayEmail.split('@')[0]
+        : 'USUÁRIO';
 
     return Scaffold(
       backgroundColor: AppTheme.black,
       appBar: AppBar(
         title: Text("OLÁ, ${userName.toUpperCase()}"),
+        backgroundColor: AppTheme.black,
         actions: [
+          // Botão SOBRE O APP
           IconButton(
-            icon: const Icon(Icons.exit_to_app, color: AppTheme.white),
+            icon: const Icon(Icons.info_outline, color: AppTheme.white),
             onPressed: () {
-              context.read<AuthProvider>().logout();
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AboutPage()),
+              );
+            },
+          ),
+          // Botão de SAIR
+          IconButton(
+            icon: const Icon(Icons.exit_to_app, color: AppTheme.red),
+            onPressed: () async {
+              await context.read<AuthProvider>().logout();
             },
           ),
         ],
@@ -45,10 +65,12 @@ class HomePage extends StatelessWidget {
             Icons.forum,
             const CommentsPage(),
           ),
-          _buildMenuCard(context, "Calculadora IMC", Icons.calculate, null),
-          _buildMenuCard(context, "Meu Perfil", Icons.person, null),
-          _buildMenuCard(context, "Histórico", Icons.history, null),
-          _buildMenuCard(context, "Sobre o App", Icons.info, const AboutPage()),
+          _buildMenuCard(
+            context,
+            "Métricas API REST",
+            Icons.cloud_sync,
+            const ApiScreen(),
+          ),
         ],
       ),
     );
@@ -92,9 +114,8 @@ class HomePage extends StatelessWidget {
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
                 color: AppTheme.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],

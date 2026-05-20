@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'exercises_page.dart';
 import 'volume_page.dart';
-import '../app_theme.dart';
+import '../../../core/theme/app_theme.dart';
 
 class UpperLowerPage extends StatelessWidget {
   const UpperLowerPage({super.key});

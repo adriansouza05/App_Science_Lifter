@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../app_theme.dart';
+import 'package:provider/provider.dart'; // ← CORREÇÃO: Necessário para acessar o Provider
+import '../../../core/theme/app_theme.dart';
+import '../controllers/auth_provider.dart'; // ← CORREÇÃO: Import do controlador de autenticação
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -12,26 +14,50 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailCtrl = TextEditingController();
 
-  void _recuperarSenha() {
+  void _recuperarSenha() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("Instruções enviadas para o e-mail informado."),
-          backgroundColor: AppTheme.red.withOpacity(0.9),
-        ),
-      );
-      Navigator.pop(context);
+      try {
+        // ← CORREÇÃO: Conexão real com o Firebase para enviar o e-mail
+        await context.read<AuthProvider>().recoveryPassword(
+          emailCtrl.text.trim(),
+        );
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Instruções enviadas para o e-mail informado."),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Erro ao enviar e-mail. Verifique se o endereço está correto.",
+            ),
+            backgroundColor: AppTheme.red,
+          ),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+
     return Scaffold(
       backgroundColor: AppTheme.black,
       appBar: AppBar(
         title: const Text("RECUPERAR SENHA"),
+        backgroundColor: AppTheme.black,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 18,
+            color: AppTheme.white,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -66,10 +92,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 },
               ),
               const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: _recuperarSenha,
-                child: const Text("SOLICITAR RECUPERAÇÃO"),
-              ),
+              authProvider.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(color: AppTheme.red),
+                    )
+                  : ElevatedButton(
+                      onPressed: _recuperarSenha,
+                      child: const Text("SOLICITAR RECUPERAÇÃO"),
+                    ),
             ],
           ),
         ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'ppl_page.dart';
 import 'upper_lower_page.dart';
 import 'full_body_page.dart';
-import '../app_theme.dart';
+import '../../../core/theme/app_theme.dart';
 
 class StrategiesPage extends StatelessWidget {
   const StrategiesPage({super.key});

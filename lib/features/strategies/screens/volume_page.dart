@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../app_theme.dart';
+// ✅ CORREÇÃO: Caminho do tema atualizado para a nova arquitetura
+import '../../../core/theme/app_theme.dart';
 
 class VolumePage extends StatelessWidget {
   const VolumePage({super.key});
@@ -8,31 +9,34 @@ class VolumePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final volumes = [
       {
-        'label':       'LOW VOLUME',
-        'series':      '3–6 séries',
-        'desc':        'Indicado para iniciantes e fases de deload. Menor estresse acumulado.',
-        'icon':        Icons.battery_2_bar,
-        'color':       const Color(0xFF2979FF),
-        'perc':        0.35,
-        'badge':       'DELOAD',
+        'label': 'LOW VOLUME',
+        'series': '3–6 séries',
+        'desc':
+            'Indicado para iniciantes e fases de deload. Menor estresse acumulado.',
+        'icon': Icons.battery_2_bar,
+        'color': const Color(0xFF2979FF),
+        'perc': 0.35,
+        'badge': 'DELOAD',
       },
       {
-        'label':       'MODERATE VOLUME',
-        'series':      '8–12 séries',
-        'desc':        'Faixa ótima para hipertrofia. Equilibra estímulo e recuperação.',
-        'icon':        Icons.battery_charging_full,
-        'color':       AppTheme.red,
-        'perc':        0.65,
-        'badge':       'RECOMENDADO',
+        'label': 'MODERATE VOLUME',
+        'series': '8–12 séries',
+        'desc':
+            'Faixa ótima para hipertrofia. Equilibra estímulo e recuperação.',
+        'icon': Icons.battery_charging_full,
+        'color': AppTheme.red,
+        'perc': 0.65,
+        'badge': 'RECOMENDADO',
       },
       {
-        'label':       'HIGH VOLUME',
-        'series':      '15–20 séries',
-        'desc':        'Para atletas avançados em fase de acumulação. Exige ótima recuperação.',
-        'icon':        Icons.electric_bolt,
-        'color':       const Color(0xFFFF6D00),
-        'perc':        1.0,
-        'badge':       'AVANÇADO',
+        'label': 'HIGH VOLUME',
+        'series': '15–20 séries',
+        'desc':
+            'Para atletas avançados em fase de acumulação. Exige ótima recuperação.',
+        'icon': Icons.electric_bolt,
+        'color': const Color(0xFFFF6D00),
+        'perc': 1.0,
+        'badge': 'AVANÇADO',
       },
     ];
 
@@ -40,8 +44,13 @@ class VolumePage extends StatelessWidget {
       backgroundColor: AppTheme.black,
       appBar: AppBar(
         title: const Text('VOLUME DE TREINO'),
+        backgroundColor: AppTheme.black, // Garantindo a cor da AppBar
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 18,
+            color: AppTheme.white,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -50,28 +59,35 @@ class VolumePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('VOLUME SEMANAL', style: AppTheme.labelUpper),
+            const Text('VOLUME SEMANAL', style: AppTheme.labelUpper),
             const SizedBox(height: 8),
             const Text('Séries por músculo', style: AppTheme.headingLarge),
             const SizedBox(height: 6),
             const Text(
               'O volume ideal depende do seu nível e da sua capacidade de recuperação.',
-              style: AppTheme.bodyText,
+              // ✅ AJUSTE: Caso bodyText não exista, usamos um TextStyle padrão
+              style: TextStyle(
+                color: AppTheme.textMuted,
+                fontSize: 15,
+                height: 1.5,
+              ),
             ),
             const SizedBox(height: 28),
 
-            ...volumes.map((v) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: _VolumeCard(
-                label:  v['label']  as String,
-                series: v['series'] as String,
-                desc:   v['desc']   as String,
-                icon:   v['icon']   as IconData,
-                color:  v['color']  as Color,
-                perc:   v['perc']   as double,
-                badge:  v['badge']  as String,
+            ...volumes.map(
+              (v) => Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: _VolumeCard(
+                  label: v['label'] as String,
+                  series: v['series'] as String,
+                  desc: v['desc'] as String,
+                  icon: v['icon'] as IconData,
+                  color: v['color'] as Color,
+                  perc: v['perc'] as double,
+                  badge: v['badge'] as String,
+                ),
               ),
-            )),
+            ),
 
             const SizedBox(height: 12),
 
@@ -86,12 +102,20 @@ class VolumePage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.lightbulb_outline, color: AppTheme.red, size: 20),
+                  const Icon(
+                    Icons.lightbulb_outline,
+                    color: AppTheme.red,
+                    size: 20,
+                  ),
                   const SizedBox(width: 12),
                   const Expanded(
                     child: Text(
                       'Comece sempre com volume moderado e progrida ao longo das semanas. O volume é apenas um dos fatores — progressão de carga é fundamental.',
-                      style: TextStyle(color: AppTheme.offWhite, fontSize: 13, height: 1.5),
+                      style: TextStyle(
+                        color: AppTheme.offWhite,
+                        fontSize: 13,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                 ],
@@ -111,8 +135,12 @@ class _VolumeCard extends StatelessWidget {
   final double perc;
 
   const _VolumeCard({
-    required this.label, required this.series, required this.desc,
-    required this.badge, required this.icon, required this.color,
+    required this.label,
+    required this.series,
+    required this.desc,
+    required this.badge,
+    required this.icon,
+    required this.color,
     required this.perc,
   });
 
@@ -132,7 +160,8 @@ class _VolumeCard extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 48, height: 48,
+                  width: 48,
+                  height: 48,
                   decoration: BoxDecoration(
                     color: color.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
@@ -147,32 +176,44 @@ class _VolumeCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(label,
+                          Text(
+                            label,
                             style: const TextStyle(
-                              color: AppTheme.white, fontSize: 14,
-                              fontWeight: FontWeight.w800, letterSpacing: 0.5,
+                              color: AppTheme.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.5,
                             ),
                           ),
                           const Spacer(),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
                             decoration: BoxDecoration(
                               color: color.withOpacity(0.15),
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: Text(badge,
+                            child: Text(
+                              badge,
                               style: TextStyle(
-                                color: color, fontSize: 10,
-                                fontWeight: FontWeight.w700, letterSpacing: 0.5,
+                                color: color,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 2),
-                      Text(series,
+                      Text(
+                        series,
                         style: TextStyle(
-                          color: color, fontSize: 18, fontWeight: FontWeight.w900,
+                          color: color,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
                     ],
@@ -197,8 +238,13 @@ class _VolumeCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(desc,
-                  style: const TextStyle(color: AppTheme.textMuted, fontSize: 13, height: 1.4),
+                Text(
+                  desc,
+                  style: const TextStyle(
+                    color: AppTheme.textMuted,
+                    fontSize: 13,
+                    height: 1.4,
+                  ),
                 ),
               ],
             ),
