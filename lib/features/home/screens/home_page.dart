@@ -1,126 +1,219 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// 1. IMPORTS DA BASE
+// IMPORTS DA BASE
 import '../../../core/theme/app_theme.dart';
 import '../../auth/controllers/auth_provider.dart';
 import '../../api/screens/api_screen.dart';
 
-// 2. IMPORTS DAS NOVAS TELAS
+// IMPORTS DAS TELAS
 import '../../strategies/screens/strategies_page.dart';
 import '../../community/screens/comments_page.dart';
 import '../../about/screens/about_page.dart';
+import 'package:flutter_application_1/features/home/screens/lib/features/home/screens/lib/features/home/screens/lib/features/home/screens/lib/features/home/screens/edit_profile_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     final authProvider = context.watch<AuthProvider>();
-    final displayEmail = authProvider.userEmail;
-    final userName = displayEmail.isNotEmpty
-        ? displayEmail.split('@')[0]
+
+    final userName = authProvider.userName.isNotEmpty
+        ? authProvider.userName
         : 'USUÁRIO';
 
     return Scaffold(
       backgroundColor: AppTheme.black,
-      appBar: AppBar(
-        title: Text("OLÁ, ${userName.toUpperCase()}"),
-        backgroundColor: AppTheme.black,
-        actions: [
-          // Botão SOBRE O APP
-          IconButton(
-            icon: const Icon(Icons.info_outline, color: AppTheme.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AboutPage()),
-              );
-            },
-          ),
-          // Botão de SAIR
-          IconButton(
-            icon: const Icon(Icons.exit_to_app, color: AppTheme.red),
-            onPressed: () async {
-              await context.read<AuthProvider>().logout();
-            },
-          ),
-        ],
-      ),
-      body: GridView.count(
-        padding: const EdgeInsets.all(16),
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        children: [
-          _buildMenuCard(
-            context,
-            "Estratégias",
-            Icons.fitness_center,
-            const StrategiesPage(),
-          ),
-          _buildMenuCard(
-            context,
-            "Comunidade",
-            Icons.forum,
-            const CommentsPage(),
-          ),
-          _buildMenuCard(
-            context,
-            "Métricas API REST",
-            Icons.cloud_sync,
-            const ApiScreen(),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildMenuCard(
-    BuildContext context,
-    String title,
-    IconData icon,
-    Widget? page,
-  ) {
-    return InkWell(
-      onTap: () {
-        if (page != null) {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => page));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Funcionalidade em desenvolvimento.")),
-          );
-        }
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppTheme.cardGrey,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppTheme.borderGrey),
+      // =========================
+      // APP BAR
+      // =========================
+      appBar: AppBar(
+        backgroundColor: AppTheme.black,
+        elevation: 0,
+
+        title: Text(
+          "OLÁ, ${userName.toUpperCase()}",
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      ),
+
+      // =========================
+      // BODY
+      // =========================
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1,
+
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppTheme.red.withOpacity(0.1),
-                shape: BoxShape.circle,
+
+            // =========================
+            // ESTRATÉGIAS
+            // =========================
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const StrategiesPage(),
+                  ),
+                );
+              },
+
+              child: buildMenuCard(
+                icon: Icons.auto_graph,
+                title: "ESTRATÉGIAS",
               ),
-              child: Icon(icon, size: 36, color: AppTheme.red),
             ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppTheme.white,
-                fontWeight: FontWeight.bold,
+
+            // =========================
+            // COMUNIDADE
+            // =========================
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CommentsPage(),
+                  ),
+                );
+              },
+
+              child: buildMenuCard(
+                icon: Icons.people,
+                title: "COMUNIDADE",
+              ),
+            ),
+
+            // =========================
+            // API
+            // =========================
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ApiScreen(),
+                  ),
+                );
+              },
+
+              child: buildMenuCard(
+                icon: Icons.api,
+                title: "API",
+              ),
+            ),
+
+            // =========================
+            // EDITAR PERFIL
+            // =========================
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const EditProfilePage(),
+                  ),
+                );
+              },
+
+              child: buildMenuCard(
+                icon: Icons.edit,
+                title: "EDITAR\nPERFIL",
               ),
             ),
           ],
         ),
       ),
+
+      // =========================
+      // BOTÃO SOBRE
+      // =========================
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+
+        child: const Icon(
+          Icons.info_outline,
+          color: Colors.white,
+        ),
+
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AboutPage(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // =========================
+  // CARD PADRÃO
+  // =========================
+  Widget buildMenuCard({
+    required IconData icon,
+    required String title,
+  }) {
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(22),
+
+        border: Border.all(
+          color: Colors.white12,
+        ),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.4),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children: [
+
+          Icon(
+            icon,
+            color: Colors.red,
+            size: 48,
+          ),
+
+          const SizedBox(height: 16),
+
+          Text(
+            title,
+            textAlign: TextAlign.center,
+
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+

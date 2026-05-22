@@ -12,22 +12,50 @@ class ExercisesPage extends StatelessWidget {
 
     if (tipo == "PPL") {
       exercicios = [
-        {"nome": "Supino reto", "sub": "Substituição: Flexão"},
-        {"nome": "Desenvolvimento", "sub": "Substituição: Elevação lateral"},
+        {"nome": "Supino reto", "sub": "Substituição: Pack deck/voador"},
+        {"nome": "Desenvolvimento", "sub": "Substituição: Elevação lateral/frontal"},
         {"nome": "Tríceps pulley", "sub": "Substituição: Tríceps banco"},
-        {"nome": "Barra fixa", "sub": "Substituição: Pulldown"},
+        {"nome": "Puxada alta", "sub": "Substituição: Pulldown"},
+        {"nome": "Cadeira extensora", "sub": "Substituição: Sissy squad"},
+        {"nome": "Supino inclinado máquina", "sub": "Substituição: Supino inclinado no smith/livre"},
+        {"nome": "Remada curvada", "sub": "Substituição: T-bar row"},
+        {"nome": "Agachamento", "sub": "Substituição: Leg press/hack squat"},
+        {"nome": "Rosca scott", "sub": "Substituição: Rosca concentrada"},
+        {"nome": "Triceps testa", "sub": "Substituição: Triceps Francês"},
+        {"nome": "Stiff", "sub": "Substituição: Flexão no banco romano"},  
+        {"nome": "Panturrilha sentado", "sub": "Substituição: Panturrilha em pé"},
       ];
     } else if (tipo == "Upper/Lower") {
       exercicios = [
-        {"nome": "Supino inclinado", "sub": "Substituição: Flexão"},
-        {"nome": "Remada curvada", "sub": "Substituição: Remada elástico"},
-        {"nome": "Agachamento", "sub": "Substituição: Leg press"},
+        {"nome": "Supino inclinado máquina", "sub": "Substituição: Supino inclinado no smith/livre"},
+        {"nome": "Remada curvada", "sub": "Substituição: T-bar row"},
+        {"nome": "Agachamento", "sub": "Substituição: Leg press/hack squat"},
+        {"nome": "Rosca scott", "sub": "Substituição: Rosca concentrada"},
+        {"nome": "Triceps testa", "sub": "Substituição: Triceps Francês"},
+        {"nome": "Stiff", "sub": "Substituição: Flexão no banco romano"},  
+        {"nome": "Panturrilha sentado", "sub": "Substituição: Panturrilha em pé"},
+        {"nome": "Puxada alta", "sub": "Substituição: Pulldown"},
+        {"nome": "Cadeira extensora", "sub": "Substituição: Sissy squad"},
+        {"nome": "Supino reto", "sub": "Substituição: Pack deck/voador"},
+        {"nome": "Desenvolvimento", "sub": "Substituição: Elevação lateral/frontal"},
+        {"nome": "Tríceps pulley", "sub": "Substituição: Tríceps banco"},
+        
       ];
     } else {
       exercicios = [
-        {"nome": "Agachamento", "sub": "Substituição: Leg press"},
-        {"nome": "Supino", "sub": "Substituição: Flexão"},
-        {"nome": "Barra fixa", "sub": "Substituição: Pulldown"},
+        {"nome": "Agachamento", "sub": "Substituição: Leg press/hack squat"},
+        {"nome": "Supino", "sub": "Substituição: voador"},
+        {"nome": "Paralela", "sub": "Substituição: supino declinado"},
+        {"nome": "Puxada alta", "sub": "Substituição: Pulldown"},
+        {"nome": "Rosca scott", "sub": "Substituição: Rosca concentrada"},
+        {"nome": "Triceps testa", "sub": "Substituição: Triceps Francês"},
+        {"nome": "Stiff", "sub": "Substituição: Flexão no banco romano"},
+        {"nome": "Cadeira flexora", "sub": "Substituição: Cadeira unilateral"},
+        {"nome": "Cadeira extensora", "sub": "Substituição: Sissy squad"},
+        {"nome": "Supino reto", "sub": "Substituição: Pack deck/voador"},
+        {"nome": "Desenvolvimento", "sub": "Substituição: Elevação lateral/frontal"},
+        {"nome": "Tríceps pulley", "sub": "Substituição: Tríceps banco"},
+        {"nome": "Remada curvada", "sub": "Substituição: T-bar row"},
       ];
     }
 
